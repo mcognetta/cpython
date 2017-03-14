@@ -473,6 +473,8 @@ class Counter(dict):
 
     >>> c.most_common(3)                # three most common elements
     [('a', 5), ('b', 4), ('c', 3)]
+    >>> c.least_common(4)                # four least common elements
+    [('e', 1), ('d', 2), ('c', 3), ('b', 4)]
     >>> sorted(c)                       # list all unique elements
     ['a', 'b', 'c', 'd', 'e']
     >>> ''.join(sorted(c.elements()))   # list elements with repetitions
@@ -551,7 +553,21 @@ class Counter(dict):
         # Emulate Bag.sortedByCount from Smalltalk
         if n is None:
             return sorted(self.items(), key=_itemgetter(1), reverse=True)
+        elif n < 0:
+            return _heapq.nsmallest(-n, self.items(), key=_itemgetter(1))
         return _heapq.nlargest(n, self.items(), key=_itemgetter(1))
+
+    def least_common(self, n=None):
+        '''List the n least common (existant) elements and their counts from the
+        least common to the most.  If n is None, then list all element counts.
+
+        >>> Counter('abcdeabcdabcaba').least_common(4)
+        [('e', 1), ('d', 2), ('c', 3), ('b', 4)]
+
+        '''
+        if n == None:
+            return sorted(self.items(), key=_itemgetter(1))
+        return self.most_common(-n)
 
     def elements(self):
         '''Iterator over elements repeating each as many times as its count.
