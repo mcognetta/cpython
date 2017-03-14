@@ -1695,6 +1695,10 @@ class TestCounter(unittest.TestCase):
         for i in range(5):
             self.assertEqual(c.most_common(i),
                              [('a', 3), ('b', 2), ('c', 1)][:i])
+        self.assertEqual(c.least_common(), [('c', 1), ('b', 2), ('a', 3)])
+        for i in range(5):
+            self.assertEqual(c.least_common(i),
+                             [('c', 1), ('b', 2), ('a', 3)][:i])
         self.assertEqual(''.join(sorted(c.elements())), 'aaabbc')
         c['a'] += 1         # increment an existing value
         c['b'] -= 2         # sub existing value to zero
